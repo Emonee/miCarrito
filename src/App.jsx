@@ -21,9 +21,13 @@ export default function App() {
   })
   const setAllItemsToZero = () => dispatchItems({type: 'setAllItemsToZero'})
   return <>
-    <AddItem addItem={addItem}/>
-    <button onClick={clearAll}>Clear all</button>
-    <button onClick={setAllItemsToZero}>Set all items to 0</button>
-    <ItemList items={items} changeItemCountTo={changeItemCountTo} removeItem={removeItem} />
+    <div className='max-w-lg mx-auto flex justify-between flex-wrap mb-5'>
+      <ItemList items={items} changeItemCountTo={changeItemCountTo} removeItem={removeItem} />
+    </div>
+    <div className='flex justify-start items-center mx-auto w-fit gap-2 mb-2'>
+      <button className='bg-emerald-900 font-bold p-2 rounded-md' onClick={clearAll}>Clear all</button>
+      <button className='bg-emerald-900 font-bold p-2 rounded-md' onClick={setAllItemsToZero}>Set all items to 0</button>
+    </div>
+      <AddItem addItem={addItem}/>
   </>
 }

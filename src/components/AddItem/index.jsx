@@ -10,9 +10,9 @@ export default function AddItem({ addItem }) {
     newNameInput.current.value = ''
   }
   return <>
-    <form onSubmit={onSubmit}>
-      <input ref={newNameInput} type="text" name="newItem" required/>
-      <button type="submit">Add item</button>
+    <form onSubmit={onSubmit} className="flex justify-center items-center gap-2">
+      <input ref={newNameInput} className="bg-cyan-600 p-2 rounded-md border border-cyan-200 text-white font-bold" type="text" name="newItem" required/>
+      <button type="submit" className="bg-emerald-900 font-bold p-2 rounded-md">Add item</button>
     </form>
   </>
 }
