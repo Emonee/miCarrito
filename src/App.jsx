@@ -21,7 +21,7 @@ export default function App() {
   })
   const setAllItemsToZero = () => dispatchItems({type: 'setAllItemsToZero'})
   return <div className='mx-auto max-w-2xl h-screen flex flex-col justify-end p-3'>
-    <div className='w-3/4 mx-auto flex justify-between flex-wrap mb-5'>
+    <div className='w-3/4 mx-auto flex justify-between flex-wrap mb-3'>
       <ItemList items={items} changeItemCountTo={changeItemCountTo} removeItem={removeItem} />
     </div>
     <div className='flex justify-start items-center mx-auto w-fit gap-2 mb-2'>
