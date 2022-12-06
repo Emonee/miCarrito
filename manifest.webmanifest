@@ -1,1 +1,1 @@
-{"name":"super","short_name":"super","start_url":"/","display":"standalone","background_color":"#ffffff","lang":"en","scope":"/"}
+{"name":"Mi carrito","short_name":"Carrito","start_url":"/","display":"standalone","background_color":"#ffffff","lang":"en","scope":"/","description":"Administrador de carrito de compras","theme_color":"#ffffff","icons":[{"src":"app-icon-192x192.png","sizes":"192x192","type":"image/png"},{"src":"app-icon-512x512.png","sizes":"512x512","type":"image/png"},{"src":"app-icon-512x512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
