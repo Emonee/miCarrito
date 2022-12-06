@@ -24,9 +24,9 @@ export default function App() {
     <div className='w-3/4 mx-auto flex justify-between flex-wrap mb-3'>
       <ItemList items={items} changeItemCountTo={changeItemCountTo} removeItem={removeItem} />
     </div>
-    <div className='flex justify-start items-center mx-auto w-fit gap-2 mb-2'>
-      <button className='bg-emerald-900 font-bold p-2 rounded-md' onClick={clearAll}>Clear all</button>
-      <button className='bg-emerald-900 font-bold p-2 rounded-md' onClick={setAllItemsToZero}>Set all items to 0</button>
+    <div className='w-3/4 flex justify-start items-center mx-auto gap-2 mb-2'>
+      <button className='flex-1 bg-emerald-900 font-bold p-2 rounded-md' onClick={clearAll}>Clear all</button>
+      <button className='flex-1 bg-emerald-900 font-bold p-2 rounded-md' onClick={setAllItemsToZero}>Set all items to 0</button>
     </div>
     <AddItem addItem={addItem}/>
   </div>

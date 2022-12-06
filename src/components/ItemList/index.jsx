@@ -10,9 +10,8 @@ const FILTER_TYPES = {
 
 export default function ItemList({ items, changeItemCountTo, removeItem }) {
   const [ itemFilter, setItemFilter ] = useState(FILTER_TYPES.NONE)
-  const setNewFilter = (event) => {
-    setItemFilter(+event.target.value)
-  }
+  const setNewFilter = (newfilter) =>
+    setItemFilter(prev => prev === +newfilter ? FILTER_TYPES.NONE : newfilter)
   const allItemsListComponents = items.map(item =>
     <Item
       key={item.itemName}
@@ -23,17 +22,25 @@ export default function ItemList({ items, changeItemCountTo, removeItem }) {
       {item}
     </Item>)
   const itemList = filterItems(allItemsListComponents, itemFilter)
+  const activeButtonColors = (filterType) => filterType === itemFilter ? 'bg-red-900 text-slate-100' : ''
   return <>
     {itemList}
-    <label className='mx-auto'>
-      <p>Filtro:</p>
-      <select onChange={setNewFilter} value={itemFilter} className="border rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
-        <option value="0">Sin filtro</option>
-        <option value="1">Es cero</option>
-        <option value="2">Mayor a cero</option>
-        <option value="3">Menor a cero</option>
-      </select>
-    </label>
+    <div className='w-full flex gap-4'>
+      <button
+        onClick={() => setNewFilter(FILTER_TYPES.LESS_THAN_ZERO)}
+        className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.LESS_THAN_ZERO)}`}
+      >&lt;</button>
+
+      <button
+        onClick={() => setNewFilter(FILTER_TYPES.IS_ZERO)}
+        className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.IS_ZERO)}`}
+      >0</button>
+
+      <button
+        onClick={() => setNewFilter(FILTER_TYPES.MORE_THAN_ZERO)}
+        className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.MORE_THAN_ZERO)}`}
+      >&gt;</button>
+    </div>
   </>
 }
 
