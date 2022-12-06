@@ -13,7 +13,7 @@ export default defineConfig({
         name: 'Mi carrito',
         short_name: 'Carrito',
         description: 'Administrador de carrito de compras',
-        theme_color: '#ffffff',
+        theme_color: '#1F2937',
         icons: [
           {
             src: 'app-icon-192x192.png',
