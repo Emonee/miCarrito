@@ -25,7 +25,7 @@ export default function ItemList({ items, changeItemCountTo, removeItem }) {
   const activeButtonColors = (filterType) => filterType === itemFilter ? 'bg-red-900 text-slate-100' : ''
   return <>
     {itemList}
-    <div className='w-full flex gap-4'>
+    <div className='w-full flex gap-4 mt-3'>
       <button
         onClick={() => setNewFilter(FILTER_TYPES.LESS_THAN_ZERO)}
         className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.LESS_THAN_ZERO)}`}
