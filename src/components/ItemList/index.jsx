@@ -23,25 +23,29 @@ export default function ItemList({ items, changeItemCountTo, removeItem }) {
     </Item>)
   const itemList = filterItems(allItemsListComponents, itemFilter)
   const activeButtonColors = (filterType) => filterType === itemFilter ? 'bg-red-900 text-slate-100' : ''
-  return <>
-    {itemList}
-    <div className='w-full flex gap-4 mt-3'>
-      <button
-        onClick={() => setNewFilter(FILTER_TYPES.LESS_THAN_ZERO)}
-        className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.LESS_THAN_ZERO)}`}
-      >&lt;</button>
+  return (
+    <div className='w-11/12 mx-auto flex flex-col justify-end mb-3' style={{height: 'calc(100vh - 129px)'}}>
+      <div className='w-full overflow-auto flex flex-col-reverse'>
+        {itemList}
+      </div>
+      <div className='w-full flex gap-4 mt-3'>
+        <button
+          onClick={() => setNewFilter(FILTER_TYPES.LESS_THAN_ZERO)}
+          className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.LESS_THAN_ZERO)}`}
+        >&lt;</button>
 
-      <button
-        onClick={() => setNewFilter(FILTER_TYPES.IS_ZERO)}
-        className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.IS_ZERO)}`}
-      >0</button>
+        <button
+          onClick={() => setNewFilter(FILTER_TYPES.IS_ZERO)}
+          className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.IS_ZERO)}`}
+        >0</button>
 
-      <button
-        onClick={() => setNewFilter(FILTER_TYPES.MORE_THAN_ZERO)}
-        className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.MORE_THAN_ZERO)}`}
-      >&gt;</button>
+        <button
+          onClick={() => setNewFilter(FILTER_TYPES.MORE_THAN_ZERO)}
+          className={`flex-1 rounded-md border-2 border-slate-100 ${activeButtonColors(FILTER_TYPES.MORE_THAN_ZERO)}`}
+        >&gt;</button>
+      </div>
     </div>
-  </>
+  )
 }
 
 function filterItems(itemsListComponents, itemFilter) {

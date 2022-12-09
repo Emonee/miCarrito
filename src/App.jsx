@@ -20,14 +20,14 @@ export default function App() {
     itemName
   })
   const setAllItemsToZero = () => dispatchItems({type: 'setAllItemsToZero'})
-  return <div className='mx-auto max-w-2xl h-screen flex flex-col justify-end p-3'>
-    <div className='w-11/12 mx-auto flex justify-between flex-wrap mb-3'>
+  return (
+    <div className='mx-auto max-w-2xl h-screen flex flex-col justify-end p-3'>
       <ItemList items={items} changeItemCountTo={changeItemCountTo} removeItem={removeItem} />
+      <div className='w-11/12 flex justify-start items-center mx-auto gap-2 mb-2'>
+        <button className='flex-1 bg-emerald-900 font-bold p-2 rounded-md self-stretch' onClick={clearAll}>Clear all</button>
+        <button className='flex-1 bg-emerald-900 font-bold p-2 rounded-md self-stretch' onClick={setAllItemsToZero}>Set all to 0</button>
+      </div>
+      <CreateItemDialog addItem={addItem} />
     </div>
-    <div className='w-11/12 flex justify-start items-center mx-auto gap-2 mb-2'>
-      <button className='flex-1 bg-emerald-900 font-bold p-2 rounded-md self-stretch' onClick={clearAll}>Clear all</button>
-      <button className='flex-1 bg-emerald-900 font-bold p-2 rounded-md self-stretch' onClick={setAllItemsToZero}>Set all to 0</button>
-    </div>
-    <CreateItemDialog addItem={addItem} />
-  </div>
+  )
 }
