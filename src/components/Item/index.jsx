@@ -7,7 +7,7 @@ export default function Item({ item: { itemName, itemCount }, changeItemCountTo,
       <p className="text-lg">{itemName}</p>
       <div className="flex justify-start items-center bg-orange-600 rounded-md font-bold ml-auto">
         <button className="w-7 h-7" onClick={() => changeItemCountTo(itemName, itemCount - 1)}>-</button>
-        <p className="mx-2">{itemCount}</p>
+        <p className="w-10 text-center">{itemCount}</p>
         <button className="w-7 h-7" onClick={() => changeItemCountTo(itemName, itemCount + 1)}>+</button>
       </div>
     </div>

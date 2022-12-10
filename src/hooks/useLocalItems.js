@@ -1,17 +1,19 @@
 import { useReducer, useEffect } from "react"
 
+import { FILTER_TYPES } from '../App'
+
 function reducer(state, action) {
   const actions = {
     setInitialState: () => action.items,
-    removeAllItems: () => {
-      localStorage.clear()
-      return []
+    removeAllItems() {
+      const { itemFilter } = action
+      return (itemFilter === FILTER_TYPES.NONE) ? removeAllItems() : removeFilteredItems(itemFilter, state)
     },
-    addItem: () => {
+    addItem() {
       localStorage.setItem(action.newItem.itemName, 0)
       return [ ...state, action.newItem ]
     },
-    changeItemCountTo: () => {
+    changeItemCountTo() {
       const { itemName, newCountValue } = action
       const itemIndex = state.findIndex(item => item.itemName === itemName)
       const newItem = { itemName, itemCount: newCountValue }
@@ -29,11 +31,8 @@ function reducer(state, action) {
       return newState
     },
     setAllItemsToZero() {
-      for (let index = 0; index < localStorage.length; index++) {
-        const itemName = localStorage.key(index)
-        localStorage.setItem(itemName, 0)
-      }
-      return state.map(({itemName}) => ({ itemName, itemCount: 0 }))
+      const { itemFilter } = action
+      return (itemFilter === FILTER_TYPES.NONE) ? setAllItemsToZero(state) : setToZeroByFilteredItems(itemFilter, state)
     }
   }
   return actions[action.type]()
@@ -51,4 +50,53 @@ export default function useLocalItems() {
     dispatch({type: 'setInitialState', items})
   }, [])
   return [ state, dispatch ]
+}
+
+function removeAllItems() {
+  localStorage.clear()
+  return []
+}
+
+function removeFilteredItems(itemFilter, state) {
+  const options = {
+    [FILTER_TYPES.IS_ZERO]: () => state.filter(({ itemCount }) => itemCount !== 0),
+    [FILTER_TYPES.LESS_THAN_ZERO]: () => state.filter(({ itemCount }) => itemCount >= 0),
+    [FILTER_TYPES.MORE_THAN_ZERO]: () => state.filter(({ itemCount }) => itemCount <= 0)
+  }
+  return options[itemFilter]()
+}
+
+function setAllItemsToZero(state) {
+  for (let index = 0; index < localStorage.length; index++) {
+    const itemName = localStorage.key(index)
+    localStorage.setItem(itemName, 0)
+  }
+  return state.map(({itemName}) => ({ itemName, itemCount: 0 }))
+}
+
+function setToZeroByFilteredItems(itemFilter, state) {
+  const options = {
+    [FILTER_TYPES.IS_ZERO]: () => state,
+    [FILTER_TYPES.LESS_THAN_ZERO]() {
+      for (let index = 0; index < localStorage.length; index++) {
+        const { itemName, itemCount } = getItemByKey(index)
+        if(itemCount < 0) localStorage.setItem(itemName, 0)
+      }
+      return state.map(item => item.itemCount < 0 ? { ...item, itemCount: 0 } : item )
+    },
+    [FILTER_TYPES.MORE_THAN_ZERO]() {
+      for (let index = 0; index < localStorage.length; index++) {
+        const { itemName, itemCount } = getItemByKey(index)
+        if(itemCount > 0) localStorage.setItem(itemName, 0)
+      }
+      return state.map(item => item.itemCount > 0 ? { ...item, itemCount: 0 } : item )
+    }
+  }
+  return options[itemFilter]()
+}
+
+function getItemByKey(key) {
+  const itemName = localStorage.key(key)
+  const itemCount = localStorage.getItem(itemName)
+  return { itemName, itemCount }
 }
