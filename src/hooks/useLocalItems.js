@@ -59,9 +59,33 @@ function removeAllItems() {
 
 function removeFilteredItems(itemFilter, state) {
   const options = {
-    [FILTER_TYPES.IS_ZERO]: () => state.filter(({ itemCount }) => itemCount !== 0),
-    [FILTER_TYPES.LESS_THAN_ZERO]: () => state.filter(({ itemCount }) => itemCount >= 0),
-    [FILTER_TYPES.MORE_THAN_ZERO]: () => state.filter(({ itemCount }) => itemCount <= 0)
+    [FILTER_TYPES.IS_ZERO]() {
+      const conditionItemNames = []
+      for (let index = 0; index < localStorage.length; index++) {
+        const { itemName, itemCount } = getItemByKey(index)
+        if (itemCount === 0) conditionItemNames.push(itemName)
+      }
+      for (const itemName of conditionItemNames) localStorage.removeItem(itemName)
+      return state.filter(({ itemCount }) => itemCount !== 0)
+    },
+    [FILTER_TYPES.LESS_THAN_ZERO]() {
+      const conditionItemNames = []
+      for (let index = 0; index < localStorage.length; index++) {
+        const { itemName, itemCount } = getItemByKey(index)
+        if (itemCount < 0) conditionItemNames.push(itemName)
+      }
+      for (const itemName of conditionItemNames) localStorage.removeItem(itemName)
+      return state.filter(({ itemCount }) => itemCount >= 0)
+    },
+    [FILTER_TYPES.MORE_THAN_ZERO]() {
+      const conditionItemNames = []
+      for (let index = 0; index < localStorage.length; index++) {
+        const { itemName, itemCount } = getItemByKey(index)
+        if (itemCount > 0) conditionItemNames.push(itemName)
+      }
+      for (const itemName of conditionItemNames) localStorage.removeItem(itemName)
+      return state.filter(({ itemCount }) => itemCount <= 0)
+    }
   }
   return options[itemFilter]()
 }
@@ -78,17 +102,21 @@ function setToZeroByFilteredItems(itemFilter, state) {
   const options = {
     [FILTER_TYPES.IS_ZERO]: () => state,
     [FILTER_TYPES.LESS_THAN_ZERO]() {
+      const conditionalItemNames = []
       for (let index = 0; index < localStorage.length; index++) {
         const { itemName, itemCount } = getItemByKey(index)
-        if(itemCount < 0) localStorage.setItem(itemName, 0)
+        if(itemCount < 0) conditionalItemNames.push(itemName)
       }
+      for (const itemName of conditionalItemNames) localStorage.setItem(itemName, 0)
       return state.map(item => item.itemCount < 0 ? { ...item, itemCount: 0 } : item )
     },
     [FILTER_TYPES.MORE_THAN_ZERO]() {
+      const conditionalItemNames = []
       for (let index = 0; index < localStorage.length; index++) {
         const { itemName, itemCount } = getItemByKey(index)
-        if(itemCount > 0) localStorage.setItem(itemName, 0)
+        if(itemCount > 0) conditionalItemNames.push(itemName)
       }
+      for (const itemName of conditionalItemNames) localStorage.setItem(itemName, 0)
       return state.map(item => item.itemCount > 0 ? { ...item, itemCount: 0 } : item )
     }
   }
