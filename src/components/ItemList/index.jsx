@@ -1,27 +1,17 @@
+import { useLiveQuery } from "dexie-react-hooks"
 import Item from '../Item'
+import { db } from "../../db"
+import { FILTER_TYPES } from "../../App"
 
-import { FILTER_TYPES } from '../../App'
+export default function ItemList({ itemFilter }) {
+  const items = useLiveQuery(
+    getQueryFunctionByFilter(itemFilter),
+    [ itemFilter ]
+  )
+  const allItemsListComponents = items?.map((item) =>
+    <Item key={item.id} item={item} />
+  )  
 
-export default function ItemList({ items, dispatchItems, itemFilter }) {
-  const changeItemCountTo = (itemName, newCountValue) => dispatchItems({
-    type: 'changeItemCountTo',
-    itemName,
-    newCountValue
-  })
-  const removeItem = (itemName) => dispatchItems({
-    type: 'removeItem',
-    itemName
-  })
-  const itemList = filterItems(items, itemFilter)
-  const allItemsListComponents = itemList.map(item =>
-    <Item
-      key={item.itemName}
-      item={item}
-      changeItemCountTo={changeItemCountTo}
-      removeItem={removeItem}
-    >
-      {item}
-    </Item>)
   return (
     <div className='w-11/12 mx-auto overflow-auto flex flex-col-reverse'>
       {allItemsListComponents}
@@ -29,12 +19,12 @@ export default function ItemList({ items, dispatchItems, itemFilter }) {
   )
 }
 
-function filterItems(items, itemFilter) {
-  const filterOptions = {
-    [FILTER_TYPES.NONE]: items,
-    [FILTER_TYPES.IS_ZERO]: items.filter(({ itemCount }) => itemCount === 0),
-    [FILTER_TYPES.MORE_THAN_ZERO]: items.filter(({ itemCount }) => itemCount > 0),
-    [FILTER_TYPES.LESS_THAN_ZERO]: items.filter(({ itemCount }) => itemCount < 0)
+function getQueryFunctionByFilter(itemFilter) {
+  const rightQuery = {
+    [FILTER_TYPES.LESS_THAN_ZERO]: () => db.items.where('count').below(0).toArray(),
+    [FILTER_TYPES.MORE_THAN_ZERO]: () => db.items.where('count').above(0).toArray(),
+    [FILTER_TYPES.IS_ZERO]: () => db.items.where('count').equals(0).toArray()
   }
-  return filterOptions[itemFilter]
+  const defaultQuery = () => db.items.toArray()
+  return rightQuery[itemFilter] || defaultQuery
 }

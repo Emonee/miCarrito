@@ -1,21 +1,17 @@
 import { useRef } from "react"
+import { db } from '../../db'
+import { alertErrorMessage } from "../../helpers/errorHandlers"
 
-export default function CreateItemDialog({ dispatchItems }) {
+export default function CreateItemDialog() {
   const dialog = useRef()
   const itemNameInput = useRef()
   const openDialog = () => dialog.current.showModal()
-  const addItem = (newItemName) => !localStorage.getItem(newItemName) && dispatchItems({
-    type: 'addItem',
-    newItem: { itemName: newItemName, itemCount: 0}
-  })
   const handleSubmit = (event) => {
     const { target, nativeEvent: { submitter: { value: submitterValue } } } = event
-    if (submitterValue === 'cancel') {
-      itemNameInput.current.value = ''
-      return
-    }
-    const formData = Object.fromEntries(new FormData(target))
-    addItem(formData.itemName)
+    if (submitterValue === 'cancel') return
+    const { itemName } = Object.fromEntries(new FormData(target))
+    if (!itemName) return
+    addItem(itemName)
     itemNameInput.current.value = ''
   }
   return <>
@@ -30,4 +26,13 @@ export default function CreateItemDialog({ dispatchItems }) {
     </dialog>
     <button onClick={openDialog} className="w-11/12 mx-auto font-bold text-3xl p-1 rounded-md bg-orange-600">+</button>  
   </>
+}
+
+function addItem(itemName) {
+  const newItemProps = {
+    name: itemName,
+    count: 0
+  }
+  db.items.add(newItemProps)
+    .catch(alertErrorMessage)
 }
