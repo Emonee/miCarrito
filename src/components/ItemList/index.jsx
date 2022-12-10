@@ -23,7 +23,7 @@ export default function ItemList({ items, dispatchItems, itemFilter }) {
       {item}
     </Item>)
   return (
-    <div className='w-11/12 mx-auto overflow-auto flex flex-col-reverse' style={{height: 'calc(100vh - 129px)'}}>
+    <div className='w-11/12 mx-auto overflow-auto flex flex-col-reverse'>
       {allItemsListComponents}
     </div>      
   )
