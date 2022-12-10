@@ -16,9 +16,17 @@ export const FILTER_TYPES = {
 export default function App() {
   const [ items, dispatchItems ] = useLocalItems()
   const [ itemFilter, setItemFilter ] = useState(FILTER_TYPES.NONE)  
+  
+  const confirmDeleteAllMessage = 'Are you sure you want to remove all visible items?'
+  const confirmSetAllZeroMessage = 'Are you sure you want to set all visible items values to zero?'
 
-  const clearAll = () => dispatchItems({ type: 'removeAllItems', itemFilter })
-  const setAllItemsToZero = () => dispatchItems({ type: 'setAllItemsToZero', itemFilter })
+  const clearAll = () => {
+    if (confirm(confirmDeleteAllMessage)) dispatchItems({ type: 'removeAllItems', itemFilter })
+  }
+  const setAllItemsToZero = () => {
+    if (confirm(confirmSetAllZeroMessage)) dispatchItems({ type: 'setAllItemsToZero', itemFilter })
+  }
+
 
   return (
     <div className='mx-auto max-w-2xl h-screen flex flex-col justify-end p-3'>
