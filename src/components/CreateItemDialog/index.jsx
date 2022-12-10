@@ -1,9 +1,13 @@
 import { useRef } from "react"
 
-export default function CreateItemDialog({ addItem }) {
+export default function CreateItemDialog({ dispatchItems }) {
   const dialog = useRef()
   const itemNameInput = useRef()
   const openDialog = () => dialog.current.showModal()
+  const addItem = (newItemName) => !localStorage.getItem(newItemName) && dispatchItems({
+    type: 'addItem',
+    newItem: { itemName: newItemName, itemCount: 0}
+  })
   const handleSubmit = (event) => {
     const { target, nativeEvent: { submitter: { value: submitterValue } } } = event
     if (submitterValue === 'cancel') {
