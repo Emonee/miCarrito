@@ -1,10 +1,9 @@
 import { useState } from 'react'
-
 import ItemList from './components/ItemList'
 import CreateItemDialog from './components/CreateItemDialog'
 import FilterSeters from './components/FilterSeters'
-
-import useLocalItems from './hooks/useLocalItems'
+import MainOperationsButtons from './components/MainOperationsButtons'
+import CategorySelector from './components/CategorySelector'
 
 export const FILTER_TYPES = {
   NONE: 0,
@@ -13,30 +12,19 @@ export const FILTER_TYPES = {
   LESS_THAN_ZERO: 3
 }
 
+export const NO_CATEGORY_SELECTED_VALUE = -1
+
 export default function App() {
-  const [ items, dispatchItems ] = useLocalItems()
-  const [ itemFilter, setItemFilter ] = useState(FILTER_TYPES.NONE)  
-  
-  const confirmDeleteAllMessage = 'Are you sure you want to remove all visible items?'
-  const confirmSetAllZeroMessage = 'Are you sure you want to set all visible items values to zero?'
-
-  const clearAll = () => {
-    if (confirm(confirmDeleteAllMessage)) dispatchItems({ type: 'removeAllItems', itemFilter })
-  }
-  const setAllItemsToZero = () => {
-    if (confirm(confirmSetAllZeroMessage)) dispatchItems({ type: 'setAllItemsToZero', itemFilter })
-  }
-
+  const [ itemFilter, setItemFilter ] = useState(FILTER_TYPES.NONE)
+  const [ categorySelected, setCategorySelected ] = useState(NO_CATEGORY_SELECTED_VALUE)
 
   return (
     <div className='mx-auto max-w-2xl h-screen flex flex-col justify-end p-3'>
-      <ItemList items={items} dispatchItems={dispatchItems} itemFilter={itemFilter} />
-      <FilterSeters setItemFilter={setItemFilter} itemFilter={itemFilter} />
-      <div className='w-11/12 flex justify-start items-center mx-auto gap-2 mb-2'>
-        <button className='flex-1 bg-emerald-900 font-bold p-2 rounded-md self-stretch' onClick={clearAll}>Clear all</button>
-        <button className='flex-1 bg-emerald-900 font-bold p-2 rounded-md self-stretch' onClick={setAllItemsToZero}>Set all to 0</button>
-      </div>
-      <CreateItemDialog dispatchItems={dispatchItems} />
+      <CategorySelector categorySelected={categorySelected} setCategorySelected={setCategorySelected} />
+      <ItemList itemFilter={itemFilter} categorySelected={categorySelected} />
+      <FilterSeters itemFilter={itemFilter} setItemFilter={setItemFilter} />
+      <MainOperationsButtons itemFilter={itemFilter} categorySelected={categorySelected} />
+      <CreateItemDialog categorySelected={categorySelected} />
     </div>
   )
 }
