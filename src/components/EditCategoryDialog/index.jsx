@@ -1,6 +1,8 @@
 import { db } from "../../db"
 import { alertErrorMessage } from "../../helpers/errorHandlers"
 import { NO_CATEGORY_SELECTED_VALUE } from "../../App"
+import { removeCategoryFromDB } from "../../db/categoryOperations"
+import { removeCategoryFromItems } from "../../db/itemOperations"
 
 export default function EditCategoryDialog({ categorySelected, setCategorySelected }) {
   const removeCategory = async () => {
@@ -16,16 +18,6 @@ export default function EditCategoryDialog({ categorySelected, setCategorySelect
   }
 
   return (
-    <button onClick={removeCategory}>DEL</button>
+    <button className="flex-1 bg-emerald-900 font-bold px-2 rounded-md" onClick={removeCategory}>DEL</button>
   )
-}
-
-function removeCategoryFromDB(categoryId) {
-  return db.categories.delete(categoryId)
-}
-
-function removeCategoryFromItems(categoryId) {
-  return db.items.where('categories').equals(categoryId).modify(item => {
-    item.categories = item.categories.filter(category => category !== categoryId)
-  })
 }

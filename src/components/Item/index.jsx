@@ -1,7 +1,5 @@
-import { db } from "../../db";
 import TrashIcon from "../../svgIconComponents/TrashIcon"
-import { alertErrorMessage } from "../../helpers/errorHandlers"
-
+import { updateItemCountById, deleteItemById } from "../../db/itemOperations"
 
 export default function Item({ item: { id, name, count } }) {
   const updateItemCount = (newCount) => updateItemCountById({ id, newCount })
@@ -18,14 +16,4 @@ export default function Item({ item: { id, name, count } }) {
       </div>
     </div>
   )
-}
-
-function updateItemCountById({ id, newCount }) {
-  db.items.update(id, { count: newCount })
-    .catch(alertErrorMessage)
-}
-
-function deleteItemById({ id }) {
-  db.items.delete(id)
-    .catch(alertErrorMessage)
 }

@@ -5,7 +5,7 @@ export default function CategoryControls({ categorySelected, setCategorySelected
   return (
     <div className="flex gap-3">
       <EditCategoryDialog categorySelected={categorySelected} setCategorySelected={setCategorySelected} />
-      <AddNewCategoryDialog />
+      <AddNewCategoryDialog setCategorySelected={setCategorySelected} />
     </div>
   )
 }

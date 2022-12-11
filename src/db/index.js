@@ -19,7 +19,6 @@ db.on('populate', async () => {
     { name: 'Chips', count: 0, categories: [snacksCategoryId] },
     { name: 'Peanuts', count: 0, categories: [snacksCategoryId] }
   ]
-  await db.items.bulkAdd(defaultItems)
   const oldItems = []
   for (let index = 0; index < localStorage.length; index++) {
     const name = localStorage.key(index)
@@ -27,5 +26,5 @@ db.on('populate', async () => {
     oldItems.push({ name, count })
   }
   for (const { name } of oldItems) localStorage.removeItem(name)
-  await db.items.bulkAdd(oldItems)
+  await Promise.all([db.items.bulkAdd(defaultItems), db.items.bulkAdd(oldItems)])
 })

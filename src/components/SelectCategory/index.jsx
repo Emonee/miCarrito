@@ -8,9 +8,7 @@ export default function SelectCategory({ inputName, categorySelected }) {
   useEffect(() => {
     setSelectValue(categorySelected)
   }, [categorySelected])
-  const onSelectchange = (event) => {
-    setSelectValue(event.target.value)
-  }
+  const onSelectchange = (event) => setSelectValue(event.target.value)
   const categories = useLiveQuery(() => db.categories.toArray())
   const options = categories?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)
 

@@ -8,8 +8,8 @@ export default function CategorySelector({ categorySelected, setCategorySelected
   const categoriesComponentList = categories?.map(category =>
     <SelectCategoryButton key={category.id} category={category} selected={category.id === categorySelected} setCategorySelected={setCategorySelected} />)
   return (
-    <div className="flex gap-7 w-11/12 mb-auto mx-auto pb-3">
-      <div className="flex flex-1 gap-2 overflow-auto">
+    <div className="w-11/12 mb-auto mx-auto pb-3">
+      <div className="flex gap-2 overflow-auto">
         { categoriesComponentList }
       </div>
       <CategoryControls categorySelected={categorySelected} setCategorySelected={setCategorySelected} />

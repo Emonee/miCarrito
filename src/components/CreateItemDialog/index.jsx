@@ -1,19 +1,17 @@
 import { useRef } from "react"
-import { NO_CATEGORY_SELECTED_VALUE } from "../../App"
-import { db } from '../../db'
-import { alertErrorMessage } from "../../helpers/errorHandlers"
+import { addItem } from "../../db/itemOperations"
 import SelectCategory from "../SelectCategory"
 
 export default function CreateItemDialog({ categorySelected }) {
   const dialog = useRef()
   const itemNameInput = useRef()
   const openDialog = () => dialog.current.showModal()
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     const { target, nativeEvent: { submitter: { value: submitterValue } } } = event
     if (submitterValue === 'cancel') return
     const { itemName, itemCategory } = Object.fromEntries(new FormData(target))
     if (!itemName) return
-    addItem({itemName, itemCategory})
+    await addItem({itemName, itemCategory})
     itemNameInput.current.value = ''
   }
   return <>
@@ -29,15 +27,4 @@ export default function CreateItemDialog({ categorySelected }) {
     </dialog>
     <button onClick={openDialog} className="w-11/12 mx-auto font-bold text-3xl p-1 rounded-md bg-orange-600">+</button>  
   </>
-}
-
-function addItem({ itemName, itemCategory }) {
-  const categories = itemCategory === NO_CATEGORY_SELECTED_VALUE ? [] : [ +itemCategory ]
-  const newItemProps = {
-    name: itemName,
-    count: 0,
-    categories
-  }
-  db.items.add(newItemProps)
-    .catch(alertErrorMessage)
 }

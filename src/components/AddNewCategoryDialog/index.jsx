@@ -1,18 +1,13 @@
-import { db } from "../../db"
-import { alertErrorMessage } from "../../helpers/errorHandlers"
+import { insertCategory } from "../../db/categoryOperations"
 
-export default function AddNewCategoryDialog() {
-  const addNewCategory = () => {
+export default function AddNewCategoryDialog({ setCategorySelected }) {
+  const addNewCategory = async () => {
     const categoryName = prompt('What name will your category have?')
     if (!categoryName) return
-    insertCategory(categoryName)
+    const newCategoryId = await insertCategory(categoryName)
+    setCategorySelected(newCategoryId)
   }
   return (
-    <button onClick={addNewCategory}>ADD</button>
+    <button className="flex-1 bg-emerald-900 font-bold px-2 rounded-md" onClick={addNewCategory}>ADD</button>
   )
-}
-
-function insertCategory(name) {
-  db.categories.add({ name })
-    .catch(alertErrorMessage)
 }
