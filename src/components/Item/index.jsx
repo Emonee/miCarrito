@@ -8,7 +8,7 @@ export default function Item({ item: { id, name, count } }) {
   const deleteItem = () => deleteItemById({ id })
 
   return (
-    <div className="flex justify-start items-center w-full gap-7 mt-4">
+    <div className="flex justify-start items-center w-full gap-7">
       <button onClick={deleteItem}><TrashIcon className="w-7 fill-red-600" /></button>
       <p className="text-lg">{name}</p>
       <div className="flex justify-start items-center bg-orange-600 rounded-md font-bold ml-auto">

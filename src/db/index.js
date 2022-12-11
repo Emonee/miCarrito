@@ -1,5 +1,4 @@
 import Dexie from 'dexie'
-import { alertErrorMessage } from '../helpers/errorHandlers'
 
 export const db = new Dexie('myDatabase')
 db.version(1)
@@ -7,19 +6,26 @@ db.version(1)
     categories: '++id, &name',
     items: '++id, &name, count, *categories'
   })
-  .upgrade(() => {
-    console.log('hello! updgrade');
-  })
 
-db.on('ready', () => {
-  if (db.verno > 1) return
-  const oldItemsName = []
+db.on('populate', async () => {
+  const defaultCategoryNames = ['Food', 'Hygiene', 'Snacks']
+  const defaultCategores = defaultCategoryNames.map(name => ({ name }))
+  const [ foodCategoryId, hygieneCategoryId, snacksCategoryId ] = await db.categories.bulkAdd(defaultCategores, { allKeys: true })
+  const defaultItems = [
+    { name: 'Apples', count: 0, categories: [foodCategoryId] },
+    { name: 'Pasta', count: 0, categories: [foodCategoryId] },
+    { name: 'Soap', count: 0, categories: [hygieneCategoryId] },
+    { name: 'Deodorant', count: 0, categories: [hygieneCategoryId] },
+    { name: 'Chips', count: 0, categories: [snacksCategoryId] },
+    { name: 'Peanuts', count: 0, categories: [snacksCategoryId] }
+  ]
+  await db.items.bulkAdd(defaultItems)
+  const oldItems = []
   for (let index = 0; index < localStorage.length; index++) {
     const name = localStorage.key(index)
-    const count = +localStorage.getItem(name) || 0
-    oldItemsName.push({ name, count })
+    const count = +localStorage.getItem(name)
+    oldItems.push({ name, count })
   }
-  for (const { name } of oldItemsName) localStorage.removeItem(name)
-  db.items.bulkAdd(oldItemsName)
-    .catch(alertErrorMessage)
+  for (const { name } of oldItems) localStorage.removeItem(name)
+  await db.items.bulkAdd(oldItems)
 })
